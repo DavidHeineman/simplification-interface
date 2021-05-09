@@ -1,0 +1,47 @@
+.container {
+    margin-top: 32px;
+}
+h1 {
+    margin-bottom: 16px;
+}
+.cwi-box {
+    user-select: none; 
+    -webkit-user-select: none; 
+    -moz-user-select: none; 
+    -khtml-user-select: none;
+    -ms-user-select: none; 
+}
+.card {
+    margin-bottom: 16px;
+}
+.list-group-item {
+    font-size: 25px;
+}
+input, .input-group {
+    margin-right: 8px;
+}
+.pg {
+    font-size: 20px;
+}
+.highlighed-sent {
+    font-weight: bold;
+}
+.highlighted-word {
+    background-color: rgb(243, 93, 93);
+}
+.list-group{
+    margin-bottom: 16px;
+}
+.warning {
+    font-size: 16px;
+    color:rgb(243, 93, 93);
+    font-weight: bold;
+}
+.is-invalid {
+    background: none !important;
+    padding-right: 0 !important;
+}
+.crossed-out {
+    text-decoration: line-through;
+    color: rgb(199, 199, 199);
+}

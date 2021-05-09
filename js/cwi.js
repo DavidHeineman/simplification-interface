@@ -3,7 +3,7 @@ function displayParagraph(data) {
     const queryString = window.location.search;
     const urlParams = new URLSearchParams(queryString);
     var pgNum = parseInt(urlParams.get('pg'));
-    if (!Object.is(pgNum, NaN)) {
+    if (!Object.is(pgNum, NaN) && pgNum >= 0 && pgNum < data.length) {
         $( '#paragraph-container' ).css('display', 'block');
         $( '#pg-num' ).html(pgNum);
         $( "#cwi-contents" ).html(data[pgNum].Text); //.replace(/\n/g, "<br />")
@@ -13,7 +13,7 @@ function displayParagraph(data) {
     }
 }
 $.ajax({
-    url: 'data.json',
+    url: 'data/data_CWI.json',
     dataType: 'json',
 }).done(displayParagraph);
 
