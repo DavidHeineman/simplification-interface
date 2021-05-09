@@ -1,6 +1,14 @@
-
+.ipynb_checkpoints/*
 default_3_levels.html
 default.html
 pg_6_output.txt
 pg_1_output.txt
 pg_data.txt
+annotation-interface/data/.ipynb_checkpoints/*
+data-collection/.ipynb_checkpoints/*
+
+data-collection/annotation/.ipynb_checkpoints/*
+data-collection/annotation/cwi-pages/*
+data-collection/annotation/data/top-reddit/*
+data-collection/demo-cwi-output/*
+data-collection/technical-paper-diagrams/*

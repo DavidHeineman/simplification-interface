@@ -9,9 +9,9 @@
     </head>
 
     <body>
-        <div class="container">
+        <div class="container" id="paragraph-container">
             <h1>Substitution Annotator</h1>
-            <h4>Paragraph no. <span id='curr'>[curr]</span> of <span id='total'>[total]</span></h4>
+            <h4>Paragraph no. <span id='curr'>[curr]</span></h4>
             <p class='lead'>Observe the highlighted word, if the potential replacements on the left do not fit in the context of the sentence, uncheck them. Then, rank the candidates by the extent to which they simplify the sentence</p>
             <div class='card'>
                 <div class="jumbotron jumbotron-fluid cwi-box card-body">
@@ -29,6 +29,11 @@
                     </div>
                 </div>
             </div>
+        </div>
+
+        <div class="container" id='null-container'>
+            <h1>Paragrpah Not Found</h1>
+            <h4>Please make sure the URL you have been given is correct</h4>
         </div>
     </body>
 

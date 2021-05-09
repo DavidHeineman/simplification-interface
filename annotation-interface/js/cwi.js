@@ -67,7 +67,7 @@ function submit() {
     var encodedUri = encodeURI(csvContent);
     var link = document.createElement("a");
     link.setAttribute("href", encodedUri);
-    link.setAttribute("download", "pg_" + parseInt(pgNum) + "_output.bin");
+    link.setAttribute("download", "cwi_" + parseInt(pgNum) + "_output.bin");
     document.body.appendChild(link);
     link.click();
 }
