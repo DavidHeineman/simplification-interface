@@ -14,10 +14,10 @@ The annotation interface is a static website so it can be served through GitHub 
 
 **CWI Interface:** 
 
-    davidheineman.github.io/simplification-interface/annotation-interface/ranking?pg=0
+    davidheineman.github.io/simplification-interface/annotation-interface/cwi?pg=0
 
 **Ranker Interface:** 
 
-    davidheineman.github.io/simplification-interface/annotation-interface/cwi?pg=0
+    davidheineman.github.io/simplification-interface/annotation-interface/ranking?pg=0
 
 **NOTE:** *When the CWI annotations are done, they MUST be run through `cwi_output_to_substitution.py` and the resulting `data_RANKER.json` file MUST be uploaded to `annotation-interface/data` so that the substitution selection annotation can work properly. This python script generates the substitutes that will then be annotated. Currently the repo has a demo `data_RANKER.json` file*
