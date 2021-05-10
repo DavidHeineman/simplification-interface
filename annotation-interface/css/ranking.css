@@ -29,6 +29,9 @@ input, .input-group {
 .highlighted-word {
     background-color: rgb(243, 93, 93);
 }
+.highlighted-phrase {
+    background-color: rgb(255, 216, 157);
+}
 .list-group{
     margin-bottom: 16px;
 }

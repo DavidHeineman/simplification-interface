@@ -49,8 +49,11 @@ function generateView(i, j) {
     // Generate Sortable Word List
     for (var k = 0; k < candidates_list[j][4].length; k++) {
         var word = candidates_list[j][4][k];
+        let wordy = candidates_list[j][4][k][2];
+        let rb = candidates_list[j][4][k][0];
+        let re = candidates_list[j][4][k][1];
         var wordInput = document.createElement('li');
-        wordInput.innerHTML = word;
+        wordInput.innerHTML = word[2];
         wordInput.classList.add('list-group-item');
         $(wordInput).on('click', function() {
             if (this.classList.contains('crossed-out')) {
@@ -72,6 +75,32 @@ function generateView(i, j) {
                 }
                 
             }
+        });
+        $(wordInput).mouseenter(function() {
+            document.getElementById('pg').innerHTML = paragraphs.substring(0, candidates_list[j][0]);
+            var highlight = document.createElement("span");
+            highlight.classList.add('highlighed-sent');
+            highlight.innerHTML = " ".concat(paragraphs.substring(candidates_list[j][0], candidates_list[j][0] + rb).concat(" "));
+            var word = document.createElement("span");
+            word.classList.add('highlighted-phrase');
+            word.innerHTML = " ".concat(wordy);
+            highlight.appendChild(word);
+            highlight.append(" ".concat(paragraphs.substring(candidates_list[j][0] + re, candidates_list[j][1]).concat(" ")));
+            document.getElementById('pg').appendChild(highlight);
+            document.getElementById('pg').append(paragraphs.substring(candidates_list[j][1]));
+
+        }).mouseleave(function() {
+            document.getElementById('pg').innerHTML = paragraphs.substring(0, candidates_list[j][0]);
+            var highlight = document.createElement("span");
+            highlight.classList.add('highlighed-sent');
+            highlight.innerHTML = " ".concat(paragraphs.substring(candidates_list[j][0], candidates_list[j][0] + candidates_list[j][2]).concat(" "));
+            var word = document.createElement("span");
+            word.classList.add('highlighted-word');
+            word.innerHTML = " ".concat(paragraphs.substring(candidates_list[j][0] + candidates_list[j][2], candidates_list[j][0] + candidates_list[j][3]));
+            highlight.appendChild(word);
+            highlight.append(" ".concat(paragraphs.substring(candidates_list[j][0] + candidates_list[j][3], candidates_list[j][1]).concat(" ")));
+            document.getElementById('pg').appendChild(highlight);
+            document.getElementById('pg').append(paragraphs.substring(candidates_list[j][1]));
         });
         document.getElementById('word-list').appendChild(wordInput);
     }

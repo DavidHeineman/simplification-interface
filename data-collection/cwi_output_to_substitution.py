@@ -2,36 +2,15 @@ import argparse
 import csv
 import json
 from lexi.core.util import util
-from lexi.core.simplification.lexical_en import MounicaGenerator, MounicaSelector
+from lexi.core.simplification.lexical_en import MounicaGeneratorPhrasal, MounicaSelectorPhrasal
 from nltk.tokenize import word_tokenize 
 
 def main(args):
     substitution_data = []
     
     print("Loading Generator & Selector models... ", end = '')
-    generator = MounicaGenerator()
-    selector = MounicaSelector(2)
-    print("Done!")
-    
-    # LOAD PHRASAL PPDB++ CORPUS FILE
-    # DELETE ALL PHRASAL PPDB STUFF, IT'S NOT CURRENTLY USED FOR GENERATION / SELECTION
-    print("Loading SimplePPDB++ Corpus... ", end = '')
-    ppdb_file = 'simpleppdbpp-phrasal.txt'
-    corpus = {}
-    NUM_REPLACEMENTS = 10
-    for line in open(ppdb_file, encoding='utf-8'):
-        tokens = [t.strip() for t in line.strip().split('\t')]
-        if float(tokens[2]) > 0:
-            if tokens[0] not in corpus:
-                replacements = {}
-            else:
-                replacements = corpus[tokens[0]]
-            if tokens[0] not in corpus or len(corpus[tokens[0]]) < NUM_REPLACEMENTS:
-                replacements[tokens[1]] = float(tokens[2])
-                corpus[tokens[0]] = replacements
-
-    for key in corpus.keys():
-        corpus[key] = dict(sorted(corpus[key].items(), key=lambda item: item[1], reverse=True))
+    generator = MounicaGeneratorPhrasal()
+    selector = MounicaSelectorPhrasal(2)
     print("Done!")
     
     # LOAD CWI JSON FILE
@@ -44,18 +23,17 @@ def main(args):
         # PARSE CWI INPUT .BIN FILE
         text, count, feedback, complex_words = openCWI(args.path + "/pg_" + str(pg_num) + "_output.bin")
         
-        # GENERATE SUBSTITUTES W/ MOUNICA-GENERATOR
-        candidate_list = []
-        lost_words = []
+        # GENERATE SUBSTITUTES W/ PHRASAL-MOUNICA-GENERATOR
+        candidate_list, lost_words = [], []
         for sb, se, wb, we in complex_words:
             sent = text[sb:se].lower()
-            candidates = generator.getSubstitutions(sent[wb:we])
+            candidates = generator.getSubstitutions(sent, wb, we)
             if candidates:
                 candidate_list.append((sb, se, wb, we, candidates))
             else:
                 lost_words.append(sent[wb:we])
-        print("[" + str(pg_num) + "] " + "Generated no substitutions for {} words".format(len(lost_words)))
-        
+        print("[" + str(pg_num) + "] " + "Generated no substitutions for {} of {} words".format(len(lost_words), len(complex_words)))
+
         # SELECT SUBSTITUTES W/ MOUNICA-SELECTOR
         selected_list = []
         notSelected = 0
@@ -68,31 +46,21 @@ def main(args):
             selected_list.append((sb, se, wb, we, selected))
         print("[" + str(pg_num) + "] " + 'No selected substitutions for {} words'.format(notSelected))
         
-        # GENERATE PHRASAL SUBSTITUTIONS
-        candidate_list = []
-        lost_words = []
-        for sb, se, wb, we in complex_words:
-            sent = text[sb:se].lower()
-            candidates = getSubstitutionsPhrasal(corpus, sent, wb, we)
-            if candidates:
-                candidate_list.append((sb, se, wb, we, candidates))
-            else:
-                lost_words.append(sent[wb:we])
-        print("[" + str(pg_num) + "] " + "Generated no substitutions for {} of {} words".format(len(lost_words), len(complex_words)))
-        
         # APPEND TO SUBSTITUTION LIST
         sub_out = []
         for sb, se, wb, we, cands in candidate_list:
             sub_out.append([sb, se, wb, we, cands])
-        out = {}
-        out['ID'] = pg_num
-        out['Title'] = cwi_data[pg_num]['Title']
-        out['URL'] = cwi_data[pg_num]['URL']
-        out['Text'] = cwi_data[pg_num]['Text']
-        out['Large Paragraph Index'] = cwi_data[pg_num]['Large Paragraph Index']
-        out['Source'] = cwi_data[pg_num]['Source']
-        out['Substitutes'] = sub_out
-        substitution_data.append(out)
+
+        # COMPILE INTO WORD ENTRY
+        word = {}
+        word['ID'] = pg_num
+        word['Title'] = cwi_data[pg_num]['Title']
+        word['URL'] = cwi_data[pg_num]['URL']
+        word['Text'] = cwi_data[pg_num]['Text']
+        word['Large Paragraph Index'] = cwi_data[pg_num]['Large Paragraph Index']
+        word['Source'] = cwi_data[pg_num]['Source']
+        word['Substitutes'] = sub_out
+        substitution_data.append(word)
         
     print("Saved generated substitutes to data_RANKER.json!")
     with open("data_RANKER.json", "w") as f:
@@ -147,33 +115,6 @@ def openCWI(path):
         j += len(word) + 1
     
     return text, count, feedback, complex_words
-
-def getSubstitutionsPhrasal(corpus, sent, so, eo):
-    t_b = word_tokenize(sent[:so])
-    t_a = word_tokenize(sent[eo:])
-    t_b = ['<S>'] + t_b
-    t_a = t_a + ['</S>']
-
-    ngrams = []
-    for i in range(0,8):
-        for j in range(0,8):
-            out = sent[so:eo]
-            if (i != 0):
-                for word in t_b[::-1][:i]:
-                    out = word + " " + out
-            if (j != 0):
-                for word in t_a[:j]:
-                    out = out + " " + word
-            if (len(word_tokenize(out)) < 8 and out not in ngrams):
-                ngrams.append(out)
-    
-    phrases = []
-    for phrase in ngrams:
-        if phrase in corpus:
-            phrases.append((phrase, list(corpus[phrase].keys())))
-        # else:
-            # phrases.append((phrase, None))
-    return phrases
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Converts the CWI annotation output .bin files \n'
