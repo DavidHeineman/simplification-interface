@@ -48,6 +48,9 @@ input, .input-group {
     text-decoration: line-through;
     color: rgb(199, 199, 199);
 }
+.hidden-pg {
+    display:none;
+}
 #paragraph-container, #null-container {
     display:none;
 }

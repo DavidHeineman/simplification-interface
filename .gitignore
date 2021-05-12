@@ -8,6 +8,12 @@ annotation-interface/data/.ipynb_checkpoints/*
 data-collection/.ipynb_checkpoints/*
 data-collection/annotation/.ipynb_checkpoints/*
 data-collection/annotation/cwi-pages/*
+data-collection/res/cwi-pages/*
+data-collection/res/demo-cwi-output/*
+data-collection/res/top-reddit/*
 data-collection/annotation/data/top-reddit/*
 data-collection/demo-cwi-output/*
 data-collection/technical-paper-diagrams/*
+data-collection/0 Test Set.ipynb
+data-collection/1 Ranking Set.ipynb
+data-collection/2 Test Set Statistics for Technical Paper.ipynb

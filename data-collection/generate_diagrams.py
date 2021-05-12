@@ -135,9 +135,9 @@ def main(args):
     plt.savefig("plt-paragrpahs-per-text.svg")
 
     ## Count of the amount of sentences removed for substitution selection
-    # Get number of sentences in all paragraphs
-    # Get number of sentences in target paragraph
-    # Subtract the first two to get the thrown out sentences
+        # Get number of sentences in all paragraphs
+        # Get number of sentences in target paragraph
+        # Subtract the first two to get the thrown out sentences
     rem = 0
     keep = 0
     for i in range(0, len(df[df['Source'] == 'wikipedia'])):
